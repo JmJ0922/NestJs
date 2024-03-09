@@ -1,41 +1,40 @@
 import { Body, Controller,Delete,Get,Param,Post, Put, Query } from '@nestjs/common';
 import { CreateApiDto } from './dto/create-api.dto';
 import { UpdateApiDto } from './dto/update-api.dto';
+import { ApisService } from './apis.service';
+
+// const service = new ApisService();
+// const controller = new ApisController(service);
 
 @Controller('apis')
 export class ApisController {
+    constructor(private readonly apisService:ApisService){}
 
-//GET /apis?type=fast --> []
+//GET /apis?weapon=fast --> []
 @Get()
-getApis(@Query('type') type: string){
-    return [{ type }];
+getApis(@Query('weapon') weapon: 'stars'|'nunchucks'){
+    // const service = new ApisService();
+    return this.apisService.getNinjas(weapon);
 }
 //GET /apis/:id --> {...}
 @Get(':id')
 getOneApi(@Param('id') id: string){
-    return {
-        id,
-    };
+    return this.apisService.getNinja(+id)
 }
 //POST /apis
 @Post()
-createApi(@Body() createApiDta: CreateApiDto){
-    return {
-        name: createApiDta.name,
-    };
+createApi(@Body() createApiDto: CreateApiDto){
+    return this.apisService.createNinja(createApiDto);
 }
 //PUT /apis/:id --> {...}
 @Put(':id')
-updateApi(@Param('id') id: string, @Body() UpdateApiDto: UpdateApiDto){
-    return {
-        id,
-        name:UpdateApiDto,
-    };
+updateApi(@Param('id') id: string, @Body() updateApiDto: UpdateApiDto){
+    return this.apisService.updateNinja(+id, updateApiDto);
 }
 //DELETE /apis/:id
 @Delete(':id')
 removeApi(@Param('id') id: string){
-    return {};
+    return this.apisService.removeNinja(+id);
 }
 
 }

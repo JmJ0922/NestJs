@@ -1,3 +1,4 @@
 export class CreateApiDto {
-    name:String
+    name:string;
+    weapon:'stars' | 'nunchucks';
 }
