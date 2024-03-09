@@ -1,12 +1,14 @@
-import { Body, Controller,Delete,Get,NotFoundException,Param,ParseIntPipe,Post, Put, Query, ValidationPipe } from '@nestjs/common';
+import { Body, Controller,Delete,Get,NotFoundException,Param,ParseIntPipe,Post, Put, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { CreateApiDto } from './dto/create-api.dto';
 import { UpdateApiDto } from './dto/update-api.dto';
 import { ApisService } from './apis.service';
+import { BeltGuard } from 'src/belt/belt.guard';
 
 // const service = new ApisService();
 // const controller = new ApisController(service);
 
 @Controller('apis')
+// @UseGuards(BeltGuard) //we can use this either in whole controller..or in individual methods
 export class ApisController {
     constructor(private readonly apisService:ApisService){}
 
@@ -27,6 +29,7 @@ getOneApi(@Param('id',ParseIntPipe) id: number){
 }
 //POST /apis
 @Post()
+@UseGuards(BeltGuard) 
 createApi(@Body(new ValidationPipe()) createApiDto: CreateApiDto){
     return this.apisService.createNinja(createApiDto);
 }
