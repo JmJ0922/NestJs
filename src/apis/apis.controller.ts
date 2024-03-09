@@ -1,4 +1,4 @@
-import { Body, Controller,Delete,Get,Param,Post, Put, Query } from '@nestjs/common';
+import { Body, Controller,Delete,Get,NotFoundException,Param,Post, Put, Query } from '@nestjs/common';
 import { CreateApiDto } from './dto/create-api.dto';
 import { UpdateApiDto } from './dto/update-api.dto';
 import { ApisService } from './apis.service';
@@ -19,7 +19,11 @@ getApis(@Query('weapon') weapon: 'stars'|'nunchucks'){
 //GET /apis/:id --> {...}
 @Get(':id')
 getOneApi(@Param('id') id: string){
-    return this.apisService.getNinja(+id)
+    try{
+        return this.apisService.getNinja(+id)
+    }catch(err){
+        throw new NotFoundException();
+    }
 }
 //POST /apis
 @Post()
